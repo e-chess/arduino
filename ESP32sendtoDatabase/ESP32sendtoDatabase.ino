@@ -1,6 +1,6 @@
 /*
- *  This sketch receive a message to a TCP server
- *
+ *  This sketch sends test data to the e-chess turn database.
+ *  e-chess is a project by Marcus Schoch and Jan Schneider.
  */
 
 #include <WiFi.h>
@@ -19,12 +19,11 @@ String req = "";
 
 void loop() {
   checkbutton();
-  checkincomping();
 }
 
 void checkbutton(){
   insertDB(23, 1234);
-  delay(5000);
+  delay(15000);
 }
 int valueInc = 0;
 
@@ -34,7 +33,7 @@ void insertDB(int sensor, int value){
   const uint16_t port = 80;
   
   // Define the IP of the TCP-Server
-  const char * host = "http://jan-patrick.de/chess/database"; 
+  const char * host = "jan-patrick.de"; 
   
   // WiFiClient instance
   WiFiClient client;
@@ -54,8 +53,8 @@ void insertDB(int sensor, int value){
   if (client.connected()) {
 
     // HTTP-POST URL
-    client.println("POST /arduino/add.php HTTP/1.1"); 
-    client.println("Host: http://jan-patrick.de/chess/database"); 
+    client.println("POST /e-chess/database/add.php HTTP/1.1"); 
+    client.println("Host: jan-patrick.de"); 
     client.println("Content-Type: application/json");
 
     // Length of the JSON-String
@@ -64,17 +63,18 @@ void insertDB(int sensor, int value){
     client.println();// important need an empty line here 
     
     // HTTP-POST JSON-STRING
-     
+    printJson(PostData);
   }
 
   // DISCONNECT FROM THE SERVER IF CONNECT
   if (client.connected()) { 
+    Serial.println("DISCONNECTED");
     client.stop();  
   }
 }
 
 void printJson(String jsonString){
-  const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
+  const size_t capacity = JSON_OBJECT_SIZE(3) + 61;
   DynamicJsonBuffer jsonBuffer(capacity);
 
   JsonObject& root = jsonBuffer.parseObject(jsonString);
@@ -111,5 +111,3 @@ void setupWifi()
   Serial.print(rssi);
   Serial.println(" dBm");
 }
-
-
