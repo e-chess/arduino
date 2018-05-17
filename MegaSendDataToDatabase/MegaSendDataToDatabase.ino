@@ -5,7 +5,6 @@
  e-chess is a project by Marcus Schoch and Jan Schneider.
 
  https://www.jan-patrick.de/e-chess
-
  */
 
 #include <SPI.h>
@@ -17,7 +16,6 @@
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 // if you don't want to use DNS (and reduce your sketch size)
 // use the numeric IP instead of the name for the server:
-//IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
 char server[] = "www.jan-patrick.de";    // name address for Google (using DNS)
 
 // Set the static IP address to use if the DHCP fails to assign
@@ -28,8 +26,8 @@ IPAddress ip(192, 168, 0, 177);
 // that you want to connect to (port 80 is default for HTTP):
 EthernetClient client;
 
-String from = "77";
-String to = "7777";
+String from = "a2";
+String to = "a4";
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -74,7 +72,7 @@ void httpRequest() {
   }
   // if there's a successful connection:
   if (client.connected()) {
-    String PostData = "{\"sensor\": \"" + from + "\", \"value\": \"" + to + "\"}";
+    String PostData = "{\"source\": \"" + from + "\", \"target\": \"" + to + "\"}";
 
     // HTTP-POST URL
     client.println("POST /e-chess/database/add.php HTTP/1.1"); 
@@ -86,8 +84,7 @@ void httpRequest() {
     client.println(PostData.length());// number of bytes in the payload
     client.println();// important need an empty line here 
     
-    // HTTP-POST JSON-STRING
-    //printJson(PostData);
+    // HTTP-POST variables
     client.println(PostData);
   }
 
@@ -96,20 +93,4 @@ void httpRequest() {
     Serial.println("DISCONNECTED");
     client.stop();  
   }
-}
-
-String printJson(String jsonString){
-  const size_t capacity = JSON_OBJECT_SIZE(3) + 61;
-  DynamicJsonBuffer jsonBuffer(capacity);
-
-  JsonObject& root = jsonBuffer.parseObject(jsonString);
-  
-  Serial.print(String("Sensor: ") + root["sensor"].as<char*>());
-  Serial.println(String("Value: ") + root["value"].as<char*>());
-
-  char jsonChar[100];
-  root.printTo((char*)jsonChar, root.measureLength() + 1);
-  Serial.println(jsonChar);
-  client.print(jsonChar);
-  return jsonChar;
 }
