@@ -26,8 +26,10 @@ IPAddress ip(192, 168, 0, 177);
 // that you want to connect to (port 80 is default for HTTP):
 EthernetClient client;
 
-String from = "a2";
-String to = "a4";
+String from = "";
+String to = "";
+String PostData = "";
+char* SQUARESbestMOVE[] = {"a8","b8","c8","d8","e8","f8","g8","h8","a7","b7","c7","d7","e7","f7","g7","h7","a6","b6","c6","d6","e6","f6","g6","h6","a5","b5","c5","d5","e5","f5","g5","h5","a4","b4","c4","d4","e4","f4","g4","h4","a3","b3","c3","d3","e3","f3","g3","h3","a2","b2","c2","d2","e2","f2","g2","h2","a1","b1","c1","d1","e1","f1","g1","h1"};
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -62,7 +64,6 @@ void loop() {
   // then connect again and send data:
   httpRequest();
   delay(15000);
-
 }
 
 // this method makes a HTTP connection to the server:
@@ -72,7 +73,8 @@ void httpRequest() {
   }
   // if there's a successful connection:
   if (client.connected()) {
-    String PostData = "{\"source\": \"" + from + "\", \"target\": \"" + to + "\"}";
+    Serial.println("starting printing");
+    createValues();
 
     // HTTP-POST URL
     client.println("POST /e-chess/database/add.php HTTP/1.1"); 
@@ -86,6 +88,7 @@ void httpRequest() {
     
     // HTTP-POST variables
     client.println(PostData);
+    Serial.println("printing ended");
   }
 
   // DISCONNECT FROM THE SERVER IF CONNECT
@@ -93,4 +96,14 @@ void httpRequest() {
     Serial.println("DISCONNECTED");
     client.stop();  
   }
+}
+
+void createValues(){
+  from = SQUARESbestMOVE[random(sizeof(SQUARESbestMOVE))];
+  to = SQUARESbestMOVE[random(sizeof(SQUARESbestMOVE))];
+  while(from == to){
+    to = SQUARESbestMOVE[random(sizeof(SQUARESbestMOVE))];
+  }
+  PostData = "{\"source\": \"" + from + "\", \"target\": \"" + to + "\"}";
+  Serial.println(PostData);
 }
