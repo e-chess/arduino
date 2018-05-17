@@ -63,7 +63,8 @@ void insertDB(int sensor, int value){
     client.println();// important need an empty line here 
     
     // HTTP-POST JSON-STRING
-    printJson(PostData);
+    //printJson(PostData);
+    client.println(printJson(PostData));
   }
 
   // DISCONNECT FROM THE SERVER IF CONNECT
@@ -73,14 +74,19 @@ void insertDB(int sensor, int value){
   }
 }
 
-void printJson(String jsonString){
+String printJson(String jsonString){
   const size_t capacity = JSON_OBJECT_SIZE(3) + 61;
   DynamicJsonBuffer jsonBuffer(capacity);
 
   JsonObject& root = jsonBuffer.parseObject(jsonString);
   
   Serial.print(String("Sensor: ") + root["sensor"].as<char*>());
-  Serial.println(String(" – Value: ") + root["value"].as<char*>());
+  Serial.println(String("Value: ") + root["value"].as<char*>());
+
+  char jsonChar[100];
+  root.printTo((char*)jsonChar, root.measureLength() + 1);
+  Serial.println(jsonChar);
+  return jsonChar;
 }
 
 void setupWifi() 
