@@ -44,6 +44,7 @@ CapacitiveSensor   row_7 = CapacitiveSensor(50, 43);
 CapacitiveSensor   row_8 = CapacitiveSensor(50, 42);
 
 
+
 class Sensor                                              //creates a new class of Sensor and defines variables later used in the methods
 {  
   long time = 0;
@@ -55,83 +56,115 @@ class Sensor                                              //creates a new class 
     public:
     Sensor(){}
     
-    int readOneField(int letter, int number, int borderLetter, int borderNumber){  
+    int readOneField(char letter, int number, int borderLetter, int borderNumber){  
                 
                                                           //senses one Field. For example the field A1 it is readOneField(0, 0, 30, 30)
                                                           //                  starting at 0 for the letter A (1-B, 2-C etc..) and 0 for the number 1
-     //Calibrate the sensor
-      row_A.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_B.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_C.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_D.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_E.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_F.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_G.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_H.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      
-      row_1.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_2.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_3.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_4.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_5.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_6.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_7.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      row_8.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      
-    
-      long valueA =  row_A.capacitiveSensor(80);
-      long valueB =  row_B.capacitiveSensor(30);
-      long valueC =  row_C.capacitiveSensor(30);
-      long valueD =  row_D.capacitiveSensor(30);
-      long valueE =  row_E.capacitiveSensor(30);
-      long valueF =  row_F.capacitiveSensor(30);
-      long valueG =  row_G.capacitiveSensor(30);
-      long valueH =  row_H.capacitiveSensor(30);
-      
-      long value1 =  row_1.capacitiveSensor(80);
-      long value2 =  row_2.capacitiveSensor(30);
-      long value3 =  row_3.capacitiveSensor(30);
-      long value4 =  row_4.capacitiveSensor(30);
-      long value5 =  row_5.capacitiveSensor(30);
-      long value6 =  row_6.capacitiveSensor(30);
-      long value7 =  row_7.capacitiveSensor(30);
-      long value8 =  row_8.capacitiveSensor(30);
-      
+     
 
-      long * valuesLetter[8] = {&valueA, &valueB, &valueC, &valueD, &valueE, &valueF, &valueG, &valueH};
-      long * valuesNumber[8] = {&value1, &value2, &value3, &value4, &value5, &value6, &value7, &value8};
+     long valueLetter;
+     long valueNumber;
+     
+     switch (letter){
+      case 'A':
+      row_A.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueLetter =  row_A.capacitiveSensor(45);
+      break;
+      case 'B':
+      row_B.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueLetter =  row_B.capacitiveSensor(45);
+      break;
+      case 'C':
+      row_C.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueLetter =  row_C.capacitiveSensor(45);
+      break;
+      case 'D':
+      row_D.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueLetter =  row_D.capacitiveSensor(45);
+      break;
+      case 'E':
+      row_E.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueLetter =  row_E.capacitiveSensor(45);
+      break;
+      case 'F':
+      row_F.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueLetter =  row_F.capacitiveSensor(45);
+      break;
+      case 'G':
+      row_G.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueLetter =  row_G.capacitiveSensor(45);
+      break;
+      case 'H':
+      row_H.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueLetter =  row_H.capacitiveSensor(45);
+      break;
+     }
+
+      switch (number){
+      case 1:
+      row_1.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueNumber =  row_1.capacitiveSensor(60);
+      break;
+      case 2:
+      row_2.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueNumber =  row_2.capacitiveSensor(60);
+      break;
+      case 3:
+      row_3.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueNumber =  row_3.capacitiveSensor(60);
+      break;
+      case 4:
+      row_4.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueNumber =  row_4.capacitiveSensor(60);
+      break;
+      case 5:
+      row_5.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueNumber =  row_5.capacitiveSensor(60);
+      break;
+      case 6:
+      row_6.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueNumber =  row_6.capacitiveSensor(60);
+      break;
+      case 7:
+      row_7.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueNumber =  row_7.capacitiveSensor(60);
+      break;
+      case 8:
+      row_8.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      valueNumber =  row_8.capacitiveSensor(60);
+      break;
+     }
+     
+
+      /*Serial.print("Letter: ");
+      Serial.println(valueLetter);
+      Serial.print("Number: ");
+      Serial.println(valueNumber);*/
 
       
        
-      if (*valuesLetter[letter] > borderLetter){touchedLetter = true;}
+      if (valueLetter > borderLetter){touchedLetter = true;}
       else {touchedLetter = false;}    
-       if (*valuesNumber[number] > borderNumber){touchedNumber = true;}
-      else {touchedNumber = false;}   
+       if (valueNumber > borderNumber){touchedNumber = true;}
+      else {touchedNumber = false;}
         
         // to toggle the state of state
-        if(touchedLetter == true && touchedNumber == true && currentMillis - time > interval){
-            time = currentMillis;
+        if(touchedLetter == true && touchedNumber == true){
             return 1; 
                      
         }
-        else if (touchedLetter == false || touchedNumber == false && currentMillis - time > interval){
-            time = currentMillis;
+        else if (touchedLetter == false || touchedNumber == false){
             return 0;  
         }
-        Serial.print("Letter: ");
-        Serial.println(*valuesLetter[letter]);
-        Serial.print("Number: ");
-        Serial.println(*valuesNumber[number]);
-        delay(100);
         
     }
 
-    void doSomething(){
-      Serial.println("do something");  
-    }
+
+    
 };
 
-Sensor neuerSensor;
+Sensor e2;
+Sensor e4;
 
 
 
@@ -139,32 +172,31 @@ Sensor neuerSensor;
 void setup()
 {
   Serial.begin(9600);
-  Serial.print("Please play CHESSCLOCK!");
+  Serial.print("Have Fun!");
 }
 
 
 void loop()                    
 {
-neuerSensor.readOneField(0, 0, 30, 30); 
-//neuerSensor.doSomething();
 
- //if(neuerSensor.readOneField(0, 0, 140, 90) == 1){
- //   Serial.println("touched A1"); 
- //}
+delay(500);
 
- /*else if(neuerSensor.readOneField(0, 2, 30, 30) == 1){
-    Serial.println("touched A3"); 
+if(e4.readOneField('E', 4, 60, 50) == 1){
+    Serial.println("touched E4"); 
  }
- else if(neuerSensor.readOneField(0, 3, 30, 30) == 1){
+else if(e2.readOneField('E', 2, 45, 50) == 1){
+    Serial.println("touched E2"); 
+ }
+ /*else if(neuerSensor.readOneField(0, 3, 30, 30) == 1){
     Serial.println("touched A4"); 
  }
- else if(neuerSensor.readOneField(0, 4, 30, 30) == 1){
+ /*else if(neuerSensor.readOneField(0, 4, 30, 30) == 1){
     Serial.println("touched A5"); 
  }
- else if(neuerSensor.readOneField(0, 5, 30, 30) == 1){
+ /*else if(neuerSensor.readOneField(0, 5, 30, 30) == 1){
     Serial.println("touched A6"); 
  }
- else if(neuerSensor.readOneField(0, 6, 30, 30) == 1){
+ /*else if(neuerSensor.readOneField(0, 6, 30, 30) == 1){
     Serial.println("touched A7"); 
  }
  else if(neuerSensor.readOneField(0, 7, 30, 30) == 1){
