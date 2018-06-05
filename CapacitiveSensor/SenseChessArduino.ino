@@ -22,6 +22,14 @@
 
 #include <CapacitiveSensor.h>
 
+//#include "Adafruit_WS2801.h"
+//#include "SPI.h"
+
+//uint8_t dataPin  = 2;
+//uint8_t clockPin = 3;
+
+//Adafruit_WS2801 strip = Adafruit_WS2801(5, dataPin, clockPin);
+
 
 //initializes the sensors and already defines the pins
 
@@ -68,41 +76,41 @@ class Sensor                                              //creates a new class 
      switch (letter){
       case 'A':
       row_A.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      valueLetter =  row_A.capacitiveSensor(45);
+      valueLetter =  row_A.capacitiveSensor(90);
       break;
       case 'B':
       row_B.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      valueLetter =  row_B.capacitiveSensor(45);
+      valueLetter =  row_B.capacitiveSensor(90);
       break;
       case 'C':
       row_C.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      valueLetter =  row_C.capacitiveSensor(45);
+      valueLetter =  row_C.capacitiveSensor(90);
       break;
       case 'D':
       row_D.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      valueLetter =  row_D.capacitiveSensor(45);
+      valueLetter =  row_D.capacitiveSensor(90);
       break;
       case 'E':
       row_E.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      valueLetter =  row_E.capacitiveSensor(45);
+      valueLetter =  row_E.capacitiveSensor(90);
       break;
       case 'F':
-      row_F.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      valueLetter =  row_F.capacitiveSensor(45);
+      row_F.set_CS_AutocaL_Millis(20000);
+      valueLetter =  row_F.capacitiveSensor(60);
       break;
       case 'G':
       row_G.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      valueLetter =  row_G.capacitiveSensor(45);
+      valueLetter =  row_G.capacitiveSensor(90);
       break;
       case 'H':
       row_H.set_CS_AutocaL_Millis(0xFFFFFFFF);
-      valueLetter =  row_H.capacitiveSensor(45);
+      valueLetter =  row_H.capacitiveSensor(90);
       break;
      }
 
       switch (number){
       case 1:
-      row_1.set_CS_AutocaL_Millis(0xFFFFFFFF);
+      row_1.set_CS_AutocaL_Millis(20000);
       valueNumber =  row_1.capacitiveSensor(60);
       break;
       case 2:
@@ -136,10 +144,10 @@ class Sensor                                              //creates a new class 
      }
      
 
-      /*Serial.print("Letter: ");
-      Serial.println(valueLetter);
-      Serial.print("Number: ");
-      Serial.println(valueNumber);*/
+      //Serial.print("Letter: ");
+      //Serial.println(valueLetter);
+      //Serial.print("Number: ");
+      //Serial.println(valueNumber);
 
       
        
@@ -163,8 +171,8 @@ class Sensor                                              //creates a new class 
     
 };
 
-Sensor e2;
-Sensor e4;
+Sensor f1;
+Sensor g1;
 
 
 
@@ -173,19 +181,20 @@ void setup()
 {
   Serial.begin(9600);
   Serial.print("Have Fun!");
+  //strip.begin();
+  //strip.show();
 }
 
 
 void loop()                    
 {
 
-delay(500);
 
-if(e4.readOneField('E', 4, 60, 50) == 1){
-    Serial.println("touched E4"); 
+if(f1.readOneField('F', 1, 115, 70) == 1){
+    Serial.println("touched Formula1"); 
  }
-else if(e2.readOneField('E', 2, 45, 50) == 1){
-    Serial.println("touched E2"); 
+else if(g1.readOneField('G', 1, 125, 60) == 1){
+    Serial.println("touched E1"); 
  }
  /*else if(neuerSensor.readOneField(0, 3, 30, 30) == 1){
     Serial.println("touched A4"); 
