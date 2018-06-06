@@ -1,10 +1,10 @@
 /*
- send test data to E-CHESS test database
+ send test data to sense-chess test database
 
- This sketch sends test data to the e-chess turn database.
- e-chess is a project by Marcus Schoch and Jan Schneider.
+ This sketch sends test data to the sense-chess turn database.
+ sense-chess is a project by Marcus Schoch and Jan Schneider.
 
- https://www.jan-patrick.de/e-chess
+ https://www.jan-patrick.de/sense-chess
  */
 
 #include <SPI.h>
@@ -77,7 +77,7 @@ void httpRequest() {
     createValues();
 
     // HTTP-POST URL
-    client.println("POST /e-chess/database/add.php HTTP/1.1"); 
+    client.println("POST /sense-chess/database/add.php HTTP/1.1"); 
     client.println("Host: jan-patrick.de"); 
     client.println("Content-Type: application/json");
 

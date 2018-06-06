@@ -1,6 +1,6 @@
 /*
- *  This sketch sends test data to the e-chess turn database.
- *  e-chess is a project by Marcus Schoch and Jan Schneider.
+ *  This sketch sends test data to the sense-chess turn database.
+ *  sense-chess is a project by Marcus Schoch and Jan Schneider.
  */
 
 #include <WiFi.h>
@@ -53,7 +53,7 @@ void insertDB(int sensor, int value){
   if (client.connected()) {
 
     // HTTP-POST URL
-    client.println("POST /e-chess/database/add.php HTTP/1.1"); 
+    client.println("POST /sense-chess/database/add.php HTTP/1.1"); 
     client.println("Host: jan-patrick.de"); 
     client.println("Content-Type: application/json");
 
