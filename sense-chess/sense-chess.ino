@@ -3,11 +3,8 @@
  *  sense-chess is a project by Marcus Schoch and Jan Schneider.
  */
 
-String source = "d7";
-String target = "d6";
+String field = "d7";
 char val;
-
-
 
 void setup(void) 
 {
@@ -26,27 +23,27 @@ void loop(void)
     }
     else if(val == "d1") {
         digitalWrite(LED_BUILTIN, HIGH);
+    }else if(val == "d6") {
+        digitalWrite(LED_BUILTIN, LOW);
     }
     else{ 
         digitalWrite(LED_BUILTIN, LOW);
     }
     delay(100);
   } 
-    else {
-    sendTestData();
-    delay(500);
-    }
+  else {
+    sendData();
+    delay(1500);
+  }
 }
 
 void establishContact() {
   while (Serial.available() <= 0) {
-    Serial.println("connecting");   // send a capital A
+    Serial.println("connecting");
     delay(300);
   }
 }
 
-void sendTestData() {
-   Serial.print(source);
-   Serial.print(",");
-   Serial.println(target);
+void sendData() {
+   Serial.println(field);
 }
