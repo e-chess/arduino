@@ -18,10 +18,12 @@ void loop(void)
   if (Serial.available() > 0) { // If data is available to read,
     val = Serial.read(); // read it and store it in val
 
+    String rec = String(val);
+
     if(val == "connected") {
         digitalWrite(LED_BUILTIN, HIGH);
     }
-    else if(val == "d1") {
+    else if(rec.indexOf("d5")) {
         digitalWrite(LED_BUILTIN, HIGH);
     }else if(val == "d6") {
         digitalWrite(LED_BUILTIN, LOW);
