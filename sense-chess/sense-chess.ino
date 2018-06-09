@@ -5,11 +5,13 @@
 
 String field = "d7";
 char val;
+char delimiter[] = ",;";
+char *ptr;
 int myArray[] = {};
-String ledArray[] = { "a1 1","a2 2"};
 const int ledfield = 2;
 const int ledpin = 1;
-int pinMatrix[64][64] = { {"a1",1}, {"a2",2}, {"a3",3}, {"a4",4}, {"a5",5}, {"a6",6}, {"a7",7}, {"a8",8} 
+// !!!! dynamic storage of Arduino is too small for all 64 fields !!!!
+int pinMatrix[8][8] = { {"a1",1}, {"a2",2}, {"a3",3}, {"a4",4}, {"a5",5}, {"a6",6}, {"a7",7}, {"a8",8} 
 };
 
 void setup(void) 
@@ -26,42 +28,15 @@ void loop(void)
 
     String rec = String(val);
 
-    if(val == "connected") {
-        digitalWrite(LED_BUILTIN, HIGH);
-    }else{
-      // !!!!!!
-      // only works if Arduino receives only 5 fields, f.e.: d5, h7, g2, a6, f3
-      // !!!!!!
- /*     int reclength = rec.length();
-      if(reclength>=17){
-        String stringFive.substring(16, 18);
-        String stringFour.substring(12, 14);
-        String stringThree.substring(8, 10);
-        String stringTwo.substring(4, 6);
-        String stringOne.substring(0, 2);
-      }
-      else if (reclength>=13){
-        String stringFour.substring(12, 14);
-        String stringThree.substring(8, 10);
-        String stringTwo.substring(4, 6);
-        String stringOne.substring(0, 2);
-      }
-      else if (reclength>=9){
-        String stringThree.substring(8, 10);
-        String stringTwo.substring(4, 6);
-        String stringOne.substring(0, 2);
-      }
-      else if (reclength>=5){
-        String stringTwo.substring(4, 6);
-        String stringOne.substring(0, 2);
-      }
-      else{
-        String stringOne.substring(0, 2);
-      }
-  */  memset(myArray, 0, sizeof(myArray));
-      char delimiter[] = ",;";
-      char *ptr;
-          
+    if(rec == "connected") {
+      digitalWrite(LED_BUILTIN, HIGH);
+    }
+    else if(rec == "connecting"){
+      digitalWrite(LED_BUILTIN, LOW);
+    }
+    else{
+      memset(myArray, 0, sizeof(myArray));
+                
       // initialisieren und ersten Abschnitt erstellen
       ptr = strtok(val, delimiter);
       int i = 0;
@@ -73,9 +48,11 @@ void loop(void)
       }
       digitalWrite(LED_BUILTIN, LOW);
       for(int t =0; t<=sizeof(myArray);t++){
-        for(int j =0; j<=sizeof(ledArray);j++){
+        for(int j =0; j<=sizeof(pinMatrix);j++){
            if(pinMatrix[j][0]==myArray[t]){
+              //digitalWrite(pinMatrix[j][1], HIGH);
               digitalWrite(LED_BUILTIN, HIGH);
+              Serial.println(pinMatrix[j][0]);
            }
         }
       }  
