@@ -10,22 +10,14 @@ char *ptr;
 int myArray[] = {};
 const int ledfield = 2;
 const int ledpin = 1;
-int ledPins[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9,10,
-                 11,12,13,14,15,16,17,18,19,20,
-                 21,22,23,24,25,26,27,28,29,30,
-                 31,32,33,34,35,36,37,38,39,40,
-                 41,42,43,44,45,46,47,48,49,50,
-                 51,52,53,54,55,56,57,58,59,60,
-                 61,62,63,64};
+// !!!! dynamic storage of Arduino is too small for all 64 fields !!!!
+int pinMatrix[8][8] = { {"a1",1}, {"a2",2}, {"a3",3}, {"a4",4}, {"a5",5}, {"a6",6}, {"a7",7}, {"a8",8} 
+};
 
 void setup(void) 
 {
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
-  for(int p=0; p<64; p++)
-  {
-    pinMode(ledPins[p], OUTPUT); // Set the mode to OUTPUT
-  }
   establishContact();
 }
 
@@ -49,25 +41,20 @@ void loop(void)
       ptr = strtok(val, delimiter);
       int i = 0;
       while(ptr != NULL) {
-        myArray[i]=atoi(ptr);
+        myArray[i]=ptr;
         // naechsten Abschnitt erstellen
         ptr = strtok(NULL, delimiter);
         i++;
       }
       digitalWrite(LED_BUILTIN, LOW);
-      for(int p=0; p<64; p++)
-      {
-        digitalWrite(ledPins[p], LOW); // Set the mode to OUTPUT
-      }
-      for(int t =0; t<=sizeof(myArray);t++){;
-        digitalWrite(myArray[t], HIGH);
-        Serial.println(myArray[t]);
-        // for testing
-        if(myArray[t]==64){
-          digitalWrite(LED_BUILTIN, HIGH);
-          Serial.println("g3");
-          delay(15000);
-        }  
+      for(int t =0; t<=sizeof(myArray);t++){
+        for(int j =0; j<=sizeof(pinMatrix);j++){
+           if(pinMatrix[j][0]==myArray[t]){
+              //digitalWrite(pinMatrix[j][1], HIGH);
+              digitalWrite(LED_BUILTIN, HIGH);
+              Serial.println(pinMatrix[j][0]);
+           }
+        }
       }  
     }  
     delay(100);
@@ -82,11 +69,6 @@ void establishContact() {
   while (Serial.available() <= 0) {
     Serial.println("connecting");
     delay(300);
-    val = Serial.read(); // read it and store it in val
-    String rec = String(val);
-    if(rec == "connecting"){
-      Serial.println("h3");
-    }
   }
 }
 
