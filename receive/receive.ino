@@ -3,9 +3,17 @@
  *  sense-chess is a project by Marcus Schoch and Jan Schneider.
  */
 
-const int ledfield = 2;
-const int ledpin = 1;
+#include <Adafruit_NeoPixel.h>
+
+#define LEDSPIN 6
+#define NUMLEDS 64
+
+Adafruit_NeoPixel leds = Adafruit_NeoPixel(NUMLEDS, LEDSPIN, NEO_GRB + NEO_KHZ800);
+
 char val;
+char delimiter[] = ",;";
+char *ptr;
+int myArray[] = {};
 int ledPins[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9,10,
                  11,12,13,14,15,16,17,18,19,20,
                  21,22,23,24,25,26,27,28,29,30,
@@ -16,50 +24,54 @@ int ledPins[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9,10,
 
 void setup(void) 
 {
+  leds.begin();
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
-  for(int p=0; p<64; p++)
-  {
-    pinMode(ledPins[p], OUTPUT); // Set the mode to OUTPUT
-  }
   establishContact();
 }
 
 void loop(void) 
 {  
-  if (Serial.available() > 0) { // If data is available to read,
-    val = Serial.read(); // read it and store it in val
-      memset(myArray, 0, sizeof(myArray));
-                
-      // initialisieren und ersten Abschnitt erstellen
-      ptr = strtok(val, delimiter);
-      int i = 0;
-      while(ptr != NULL) {
-        myArray[i]=atoi(ptr);
-        // naechsten Abschnitt erstellen
-        ptr = strtok(NULL, delimiter);
-        i++;
-      }
-      digitalWrite(LED_BUILTIN, LOW);
-      for(int p=0; p<64; p++)
+  if (Serial.available() > 0) { // If data is available to read
+    val = Serial.read(); // read data and store it in val
+    memset(myArray, 0, sizeof(myArray));
+    allLEDsOff();           
+    // initialisieren und ersten Abschnitt erstellen
+    ptr = strtok(val, delimiter);
+    int i = 0;
+    while(ptr != NULL) {
+      myArray[i]=atoi(ptr);
+      // naechsten Abschnitt erstellen
+      ptr = strtok(NULL, delimiter);
+      i++;
+    }
+    for(int p=0; p<NUMLEDS; p++)
+    {
+      digitalWrite(ledPins[p], LOW); // Set the mode to OUTPUT
+    }
+    for(int t =0; t<=sizeof(myArray);t++)
+    {
+      for(int l=0;l<NUMLEDS;l++)
       {
-        digitalWrite(ledPins[p], LOW); // Set the mode to OUTPUT
+        leds.setPixelColor(l, leds.Color(255,255,255));
+        leds.show();
       }
-      for(int t =0; t<=sizeof(myArray);t++){;
-        digitalWrite(myArray[t], HIGH);
-        Serial.println(myArray[t]);
-        // for testing
-        if(myArray[t]==64){
-          digitalWrite(LED_BUILTIN, HIGH);
-          Serial.println("g3");
-          delay(15000);
-        }  
     }    
     delay(100);
   } 
 }
 
-void establishContact() {
+void allLEDsOff()
+{
+  for(int led=0;led<NUMLEDS;led++)
+  {
+    leds.setPixelColor(led, leds.Color(0,0,0));
+    leds.show();
+  } 
+}
+
+void establishContact() 
+{
   while (Serial.available() <= 0) {
     Serial.println("connecting");
     delay(300);
