@@ -6,7 +6,7 @@
 #include <Adafruit_NeoPixel.h>
 
 #define PIN 6
-#define NUMLEDS 16
+#define NUMLEDS 2
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMLEDS, PIN, NEO_GRB + NEO_KHZ800);
 
@@ -22,4 +22,17 @@ void loop() {
     pixels.show(); // This sends the updated pixel color to the hardware
     delay(SETLEDS);
   }
+  delay(5000);
+  for(int i=0;i<NUMLEDS;i++){
+    pixels.setPixelColor(i, pixels.Color(255,255,255)); // Moderately bright green color.
+    pixels.show(); // This sends the updated pixel color to the hardware
+    delay(SETLEDS);
+  }
+  delay(5000);
+  for(int i=0;i<NUMLEDS;i++){
+    pixels.setPixelColor(i, pixels.Color(0,0,0)); // Moderately bright green color.
+    pixels.show(); // This sends the updated pixel color to the hardware
+    delay(SETLEDS);
+  }
+  delay(5000);
 }
