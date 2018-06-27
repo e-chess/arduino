@@ -1,15 +1,11 @@
 /*
- *  This sketch sends test data to the sense-chess test database.
+ *  This sketch receives led data to the sense-chess database.
  *  sense-chess is a project by Marcus Schoch and Jan Schneider.
  */
 
-String field = "d7";
-char val;
-char delimiter[] = ",;";
-char *ptr;
-int myArray[] = {};
 const int ledfield = 2;
 const int ledpin = 1;
+char val;
 int ledPins[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9,10,
                  11,12,13,14,15,16,17,18,19,20,
                  21,22,23,24,25,26,27,28,29,30,
@@ -33,16 +29,6 @@ void loop(void)
 {  
   if (Serial.available() > 0) { // If data is available to read,
     val = Serial.read(); // read it and store it in val
-
-    String rec = String(val);
-
-    if(rec == "connected") {
-      digitalWrite(LED_BUILTIN, HIGH);
-    }
-    else if(rec == "connecting"){
-      digitalWrite(LED_BUILTIN, LOW);
-    }
-    else{
       memset(myArray, 0, sizeof(myArray));
                 
       // initialisieren und ersten Abschnitt erstellen
@@ -68,28 +54,14 @@ void loop(void)
           Serial.println("g3");
           delay(15000);
         }  
-      }  
-    }  
+    }    
     delay(100);
   } 
-  else {
-    sendData();
-    delay(1500);
-  }
 }
 
 void establishContact() {
   while (Serial.available() <= 0) {
     Serial.println("connecting");
     delay(300);
-    val = Serial.read(); // read it and store it in val
-    String rec = String(val);
-    if(rec == "connecting"){
-      Serial.println("h3");
-    }
   }
-}
-
-void sendData() {
-   Serial.println(field);
 }
