@@ -13,7 +13,6 @@ int myArray[] = {};
 void setup(void) 
 {
   Serial.begin(9600);
-  pinMode(LED_BUILTIN, OUTPUT);
   establishContact();
 }
 
@@ -23,19 +22,18 @@ void loop(void)
   delay(1500);
 }
 
-void establishContact() {
-  while (Serial.available() <= 0) {
+void establishContact()
+{
+  while (Serial.available() <= 0)
+  {
     Serial.println("connecting");
     delay(300);
     val = Serial.read(); // read it and store it in val
-    String rec = String(val);
-    if(rec == "connecting"){
-      Serial.println("h3");
-    }
-    
+    String rec = String(val);    
   }
 }
 
-void sendData() {
+void sendData()
+{
    Serial.println(field);
 }
