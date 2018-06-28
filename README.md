@@ -8,4 +8,8 @@
   <br>
   It is under permanent construction.
   <br>
+ <br>
 </p>
+<h4 align="center">Usage</h4>
+<p  align="center">1. Upload and run the code "send" on an Arduino Mega (needs many pins) which is connected to the capacitive sensors <a href="https://playground.arduino.cc/Main/CapacitiveSensor?from=Main.CapSense">(Arduino Library)</a>.</p>  
+<p  align="center">2. Upload and run the code "receive" on another Arduino, which is connected to the LEDs <a href="https://github.com/adafruit/Adafruit_NeoPixel">(Arduino Library)</a>.</p>
