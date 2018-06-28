@@ -19,7 +19,7 @@ void setup(void)
 void loop(void) 
 {  
   sendData();
-  delay(1500);
+  delay(random(500, 3000));
 }
 
 void establishContact()
