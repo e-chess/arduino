@@ -45,19 +45,18 @@ void loop(void)
       ptr = strtok(NULL, delimiter);
       i++;
     }
-    for(int p=0; p<NUMLEDS; p++)
+    if(myArray[0] == -1)
     {
-      digitalWrite(ledPins[p], LOW); // Set the mode to OUTPUT
+      allLEDsOff();
     }
-    for(int t =0; t<=sizeof(myArray);t++)
+    else
     {
-      for(int l=0;l<NUMLEDS;l++)
+      for(int t =0; t<=sizeof(myArray);t++)
       {
-        leds.setPixelColor(l, leds.Color(255,255,255));
+        leds.setPixelColor(myArray[t], leds.Color(255,255,255));
         leds.show();
       }
-    }    
-    delay(100);
+    }
   } 
 }
 
