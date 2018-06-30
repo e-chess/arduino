@@ -22,13 +22,6 @@
 
 #include <CapacitiveSensor.h>
 
-//#include "Adafruit_WS2801.h"
-//#include "SPI.h"
-
-//uint8_t dataPin  = 2;
-//uint8_t clockPin = 3;
-
-//Adafruit_WS2801 strip = Adafruit_WS2801(5, dataPin, clockPin);
 
 
 //initializes the sensors and already defines the pins
@@ -52,7 +45,6 @@ CapacitiveSensor   row_7 = CapacitiveSensor(50, 43);
 CapacitiveSensor   row_8 = CapacitiveSensor(50, 42);
 
 
-
 class Sensor                                              //creates a new class of Sensor and defines variables later used in the methods
 {  
   long time = 0;
@@ -60,6 +52,8 @@ class Sensor                                              //creates a new class 
   boolean touchedLetter;                                  //just to check if a state is high or low
   boolean touchedNumber;
   const int interval = 200;                               //interval to pace the code
+  int smoothedLetter;
+  int smoothedNumber;
                 
     public:
     Sensor(){}
@@ -95,7 +89,7 @@ class Sensor                                              //creates a new class 
       valueLetter =  row_E.capacitiveSensor(90);
       break;
       case 'F':
-      row_F.set_CS_AutocaL_Millis(20000);
+      row_F.set_CS_AutocaL_Millis(0xFFFFFFFF);
       valueLetter =  row_F.capacitiveSensor(60);
       break;
       case 'G':
@@ -110,7 +104,7 @@ class Sensor                                              //creates a new class 
 
       switch (number){
       case 1:
-      row_1.set_CS_AutocaL_Millis(20000);
+      row_1.set_CS_AutocaL_Millis(0xFFFFFFFF);
       valueNumber =  row_1.capacitiveSensor(60);
       break;
       case 2:
@@ -141,19 +135,19 @@ class Sensor                                              //creates a new class 
       row_8.set_CS_AutocaL_Millis(0xFFFFFFFF);
       valueNumber =  row_8.capacitiveSensor(60);
       break;
-     }
-     
+     }    
 
-      //Serial.print("Letter: ");
-      //Serial.println(valueLetter);
-      //Serial.print("Number: ");
-      //Serial.println(valueNumber);
+      smoothedNumber = smooth(valueNumber, 0.95, smoothedNumber);
+      smoothedLetter = smooth(valueLetter, 0.95, smoothedLetter);
 
-      
+      Serial.print("Letter: ");
+      Serial.println(smoothedLetter);
+      Serial.print("Number: ");
+      Serial.println(smoothedNumber);
        
-      if (valueLetter > borderLetter){touchedLetter = true;}
+      if (smoothedLetter > borderLetter){touchedLetter = true;}
       else {touchedLetter = false;}    
-       if (valueNumber > borderNumber){touchedNumber = true;}
+       if (smoothedNumber > borderNumber){touchedNumber = true;}
       else {touchedNumber = false;}
         
         // to toggle the state of state
@@ -163,17 +157,29 @@ class Sensor                                              //creates a new class 
         }
         else if (touchedLetter == false || touchedNumber == false){
             return 0;  
-        }
-        
+        }        
+    } 
+
+    float smooth(float data, float filterVal, float smoothedVal){
+  
+    if (filterVal > 1){      // check to make sure param's are within range
+      filterVal = .99;
     }
-
-
-    
+    else if (filterVal <= 0){
+      filterVal = 0;
+    }
+  
+    smoothedVal = (data * (1 - filterVal)) + (smoothedVal  *  filterVal);
+  
+    return int(smoothedVal);
+}
+       
 };
+
+
 
 Sensor f1;
 Sensor g1;
-
 
 
 
@@ -181,8 +187,6 @@ void setup()
 {
   Serial.begin(9600);
   Serial.print("Have Fun!");
-  //strip.begin();
-  //strip.show();
 }
 
 
@@ -191,9 +195,9 @@ void loop()
 
 
 if(f1.readOneField('F', 1, 115, 70) == 1){
-    Serial.println("touched Formula1"); 
+   // Serial.println("touched Formula1"); 
  }
-else if(g1.readOneField('G', 1, 125, 60) == 1){
+/*else if(g1.readOneField('G', 1, 125, 60) == 1){
     Serial.println("touched E1"); 
  }
  /*else if(neuerSensor.readOneField(0, 3, 30, 30) == 1){
@@ -212,4 +216,10 @@ else if(g1.readOneField('G', 1, 125, 60) == 1){
     Serial.println("touched A8"); 
  }*/
 }
+
+
+
+
+
+
 
