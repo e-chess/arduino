@@ -34,17 +34,20 @@ void loop(void)
 {  
   if (Serial.available() > 0) { // If data is available to read
     val = Serial.read(); // read data and store it in val
+    Serial.println("val: "+val);
     memset(myArray, 0, sizeof(myArray));
     allLEDsOff();           
     // initialisieren und ersten Abschnitt erstellen
     ptr = strtok(val, delimiter);
     int i = 0;
     while(ptr != NULL) {
-      myArray[i]=atoi(ptr);
+      //myArray[i]=atoi(ptr);
+      myArray[i]=ptr;
       // naechsten Abschnitt erstellen
       ptr = strtok(NULL, delimiter);
       i++;
     }
+    Serial.println(sizeof(myArray));
     if(myArray[0] == -1)
     {
       allLEDsOff();
@@ -53,9 +56,11 @@ void loop(void)
     {
       for(int t =0; t<=sizeof(myArray);t++)
       {
-        leds.setPixelColor(myArray[t], leds.Color(255,255,255));
-        leds.show();
+        Serial.println(myArray[t]);
+        //leds.setPixelColor(myArray[t], leds.Color(255,255,255));
+        
       }
+      leds.show();
     }
   } 
 }
