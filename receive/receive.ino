@@ -19,7 +19,10 @@ int message2;
 int message3;
 
 int myArray[64] = {};
+int oldArray[64] = {};
+int emptyArray[64] = {};
 int sizeArray;
+int sizeArrayOld;
 
 boolean newData = false;
 
@@ -38,14 +41,23 @@ void loop() {
 
     recvWithStartEndMarkers();
     if (newData == true) {
+
         strcpy(tempChars, receivedChars);
             // this temporary copy is necessary to protect the original data
             //   because strtok() used in parseData() replaces the commas with \0
         parseData();
+
+        for(int t =0; t<=sizeArrayOld-1;t++)
+          {
+           for(int i =0; i<=sizeArray-1;i++)
+          {
+             if(oldArray[t] != myArray[i]) {leds.setPixelColor(oldArray[t], leds.Color(0,0,0));}
+            }
+         }
+        
         //showParsedData();
         if(myArray[0] == -1)
         {
-          
           allLEDsOff();
           Serial.println("Aus");
         }
@@ -54,11 +66,16 @@ void loop() {
           for(int t =0; t<=sizeArray-1;t++)
           {
           Serial.println(myArray[t]);
-          leds.setPixelColor(myArray[t], leds.Color(255,255,255));
+          leds.setPixelColor(myArray[t], leds.Color(99,184,255));
          }
         leds.show();
         }
         newData = false;
+        memcpy( oldArray, myArray, 64 );
+        memcpy( myArray, emptyArray, 64 );
+        sizeArrayOld = sizeArray;
+        
+        
     }
 }
 
@@ -121,7 +138,7 @@ void parseData() {      // split the data into its parts
 void showParsedData() {
     for(int t =0; t<sizeArray;t++)
       {
-        Serial.println(myArray[t]);
+        Serial.println(oldArray[t]);
       }
 }
 
