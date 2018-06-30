@@ -10,69 +10,134 @@
 
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(NUMLEDS, LEDSPIN, NEO_GRB + NEO_KHZ800);
 
-char val;
-char delimiter[] = ",;";
-char *ptr;
-int myArray[] = {};
-int ledPins[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9,10,
-                 11,12,13,14,15,16,17,18,19,20,
-                 21,22,23,24,25,26,27,28,29,30,
-                 31,32,33,34,35,36,37,38,39,40,
-                 41,42,43,44,45,46,47,48,49,50,
-                 51,52,53,54,55,56,57,58,59,60,
-                 61,62,63,64};
+const byte numChars = 32;
+char receivedChars[numChars];
+char tempChars[numChars];        // temporary array for use when parsing
 
-void setup(void) 
-{
-  leds.begin();
-  Serial.begin(9600);
-  pinMode(LED_BUILTIN, OUTPUT);
-  establishContact();
+int message1;
+int message2;
+int message3;
+
+int myArray[64] = {};
+int sizeArray;
+
+boolean newData = false;
+
+//============
+
+void setup() {
+    leds.begin();
+    Serial.begin(9600);
+    Serial.println();
+    establishContact();
 }
 
-void loop(void) 
-{  
-  if (Serial.available() > 0) { // If data is available to read
-    val = Serial.read(); // read data and store it in val
-    Serial.println("val: "+val);
-    memset(myArray, 0, sizeof(myArray));
-    allLEDsOff();           
-    // initialisieren und ersten Abschnitt erstellen
-    ptr = strtok(val, delimiter);
+//============
+
+void loop() {
+
+    recvWithStartEndMarkers();
+    if (newData == true) {
+        strcpy(tempChars, receivedChars);
+            // this temporary copy is necessary to protect the original data
+            //   because strtok() used in parseData() replaces the commas with \0
+        parseData();
+        //showParsedData();
+        if(myArray[0] == -1)
+        {
+          
+          allLEDsOff();
+          Serial.println("Aus");
+        }
+        else
+        {
+          for(int t =0; t<=sizeArray-1;t++)
+          {
+          Serial.println(myArray[t]);
+          leds.setPixelColor(myArray[t], leds.Color(255,255,255));
+         }
+        leds.show();
+        }
+        newData = false;
+    }
+}
+
+//============
+
+void recvWithStartEndMarkers() {
+    static boolean recvInProgress = false;
+    static byte ndx = 0;
+    char startMarker = '<';
+    char endMarker = '>';
+    char rc;
+
+    while (Serial.available() > 0 && newData == false) {
+        rc = Serial.read();
+
+        if (recvInProgress == true) {
+            if (rc != endMarker) {
+                receivedChars[ndx] = rc;
+                ndx++;
+                if (ndx >= numChars) {
+                    ndx = numChars - 1;
+                }
+            }
+            else {
+                receivedChars[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
+            }
+        }
+
+        else if (rc == startMarker) {
+            recvInProgress = true;
+        }
+    }
+}
+
+//============
+
+void parseData() {      // split the data into its parts
+
+    char * strtokIndx; // this is used by strtok() as an index
+    strtokIndx = strtok(tempChars,",");
+    sizeArray = 0;
+    
+
     int i = 0;
-    while(ptr != NULL) {
-      //myArray[i]=atoi(ptr);
-      myArray[i]=ptr;
-      // naechsten Abschnitt erstellen
-      ptr = strtok(NULL, delimiter);
+    while(strtokIndx != NULL) {
+      myArray[i] = atoi(strtokIndx);
       i++;
+      strtokIndx = strtok(NULL, ",");
     }
-    Serial.println(sizeof(myArray));
-    if(myArray[0] == -1)
-    {
-      allLEDsOff();
-    }
-    else
-    {
-      for(int t =0; t<=sizeof(myArray);t++)
+
+    sizeArray = i;
+
+}
+
+//============
+
+void showParsedData() {
+    for(int t =0; t<sizeArray;t++)
       {
         Serial.println(myArray[t]);
-        //leds.setPixelColor(myArray[t], leds.Color(255,255,255));
-        
       }
-      leds.show();
-    }
-  } 
 }
+
+//============
 
 void allLEDsOff()
 {
   for(int led=0;led<NUMLEDS;led++)
   {
     leds.setPixelColor(led, leds.Color(0,0,0));
-    leds.show();
-  } 
+    
+  }
+  leds.show(); 
 }
+
+//============
 
 void establishContact() 
 {
