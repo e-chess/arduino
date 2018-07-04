@@ -1,6 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////
 //
-//  main code of smart chess ((working title)
+//  main code of sense-chess
+//
+// https://sense-chess.de
 //  
 //  authors: Marcus Schoch, Jan Schneider
 //

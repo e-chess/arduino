@@ -1,5 +1,5 @@
 /*
- *  This sketch sends field data to the sense-chess database.
+ *  This sketch sends field data to Processing.
  *  sense-chess is a project by Marcus Schoch and Jan Schneider.
  */
 
@@ -19,7 +19,7 @@ void setup(void)
 void loop(void) 
 {  
   sendData();
-  delay(random(500, 3000));
+  delay(random(10, 50));
 }
 
 void establishContact()
